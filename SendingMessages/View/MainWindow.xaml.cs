@@ -26,20 +26,29 @@ namespace SendingMessages.View
         public MainWindow()
         {
             InitializeComponent();
+            try
+            {
+                senders = XmlInteraction.DeserializeSenders();
+            }
+            catch
+            {
+                senders = new ObservableCollection<Sender>();
+            }
+
             SendersBox.DataContext = senders;
             ListMails.DataContext = eMails;
-             
+
             Closing += (s, e) =>
-            { 
+            {
                 XmlInteraction.SerializeSenders(senders);
             };
-        
+            
         }
-        
+
         PostRobot postRobot = new PostRobot();
+        ObservableCollection<Sender> senders;
         ObservableCollection<string> eMails = new ObservableCollection<string>();
-        //ObservableCollection<Sender> senders = new ObservableCollection<Sender>();
-        ObservableCollection<Sender> senders = XmlInteraction.DeserializeSenders();
+        
         List<string> sendersAddresses = new List<string>();
         public Message SentMessage { get; set; }
         //Получение адресов из файла
